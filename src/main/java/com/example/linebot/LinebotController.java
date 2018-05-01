@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 
 import com.linecorp.bot.client.LineMessagingClient;
@@ -29,7 +30,7 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 @LineMessageHandler
 public class LinebotController {
-
+	@Autowired
     private LineMessagingClient lineMessagingClient;
     // 改行コード
     private static final String CODE = "\n";
