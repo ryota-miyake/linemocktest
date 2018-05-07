@@ -11,6 +11,7 @@ import org.springframework.lang.NonNull;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.action.DatetimePickerAction;
 import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.FollowEvent;
@@ -37,10 +38,15 @@ public class LinebotController {
 
     // リッチメニュー選択時テキスト
 	private static final String JIKO_TEXT = "事故受付";
+	private static final Integer MENU_NO_JIKO = 1;
 	private static final String IRYOKIKAN_ANNA_TEXT = "医療機関案内";
+	private static final Integer MENU_NO_IRYOKIKAN = 2;
 	private static final String KEIYAKU_HENKOU_TEXT = "契約内容変更";
+	private static final Integer MENU_NO_HENKOU = 3;
 	private static final String KEIYAKU_TORIKESHI_TEXT = "契約取消";
+	private static final Integer MENU_NO_TORIKESHI = 4;
 	private static final String SUPPORTLINE_ANNAI_TEXT = "サポートライン連絡先案内";
+	private static final Integer MENU_NO_SUPPORTLINE = 5;
 
 	/**
 	 * テキスト
@@ -79,6 +85,7 @@ public class LinebotController {
     @EventMapping
     public void handlePostbackEvent(PostbackEvent event){
     	String[] data = event.getPostbackContent().getData().split(",");
+    	// リッチメニュー判定
 
     }
     /**
@@ -161,7 +168,14 @@ public class LinebotController {
     					new CarouselColumn(null,"契約3","保険期間:20180401-20190401" + CODE + "旅行先：香港" + CODE + "契約証番号：TEST000003",
     							Arrays.asList(new PostbackAction("この保険を選択する","jiko,TEST000003"))),
     					new CarouselColumn(null,"契約4","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
-    							Arrays.asList(new PostbackAction("この保険を選択する","jiko,TEST000004")))));
+    							Arrays.asList(new PostbackAction("この保険を選択する","jiko,TEST000004"))),
+    					new CarouselColumn(null,"契約4","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
+    							Arrays.asList(new DatetimePickerAction("Datetime",
+                                        "action=sel",
+                                        "datetime",
+                                        "2017-06-18T06:15",
+                                        "2100-12-31T23:59",
+                                        "1900-01-01T00:00")))));
     	TemplateMessage templateMessage = new TemplateMessage("事故受付契約選択", carouselTemplate);
     	return templateMessage;
     }
