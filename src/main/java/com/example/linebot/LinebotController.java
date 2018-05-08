@@ -36,6 +36,8 @@ public class LinebotController {
     // 改行コード
     private static final String CODE = "\n";
 
+    private LineTest lineTest = new LineTest();
+
     // リッチメニュー選択時テキスト
 	private static final String JIKO_TEXT = "事故受付";
 	private static final Integer MENU_NO_JIKO = 1;
@@ -66,6 +68,7 @@ public class LinebotController {
     @EventMapping
     public void handleLocationMessageEvent(MessageEvent<LocationMessageContent> event) {
         LocationMessageContent locationMessage = event.getMessage();
+        System.out.println("event: " + event);
     }
 
     @EventMapping
@@ -86,6 +89,7 @@ public class LinebotController {
     public void handlePostbackEvent(PostbackEvent event){
     	String[] data = event.getPostbackContent().getData().split(",");
     	// リッチメニュー判定
+        System.out.println("event: " + event);
 
     }
     /**
@@ -108,13 +112,15 @@ public class LinebotController {
             		"今回ご連絡いただいている保険事故について、該当の保険契約を以下からお選び下さい。");
             // プッシュメッセージ（カルーセルテンプレート）
             this.pushMessage(userId, this.createJikouketsukeKeiyakuCarouselTemplate());
-
+            lineTest.setMenuNo("1");
     	}else if(IRYOKIKAN_ANNA_TEXT.equals(text)){
     		// 医療機関案内
     		// 位置情報の送信を依頼
             this.replyText(replyToken,
             		"医療機関の案内を行います。" + CODE
             		+ "現在地の位置情報を送信してください。");
+
+            lineTest.setMenuNo("2");
     	}else if(KEIYAKU_HENKOU_TEXT.equals(text)){
     		// 契約変更
     		// 応答メッセージ
@@ -122,18 +128,23 @@ public class LinebotController {
             		"契約内容の変更を行います。" + CODE
             		+ "変更する契約を選択してください。");
             // プッシュメッセージ（カルーセルテンプレート）
+            lineTest.setMenuNo("3");
     	}else if(KEIYAKU_TORIKESHI_TEXT.equals(text)){
     		// 契約取消
             this.replyText(replyToken,
             		"契約内容の取消を行います。" + CODE
             		+ "変更する契約を選択してください。");
             // プッシュメッセージ（カルーセルテンプレート）
+            lineTest.setMenuNo("4");
     	}else if(SUPPORTLINE_ANNAI_TEXT.equals(text)){
     		// サポートライン連絡先案内
     		// 位置情報の送信を依頼
             this.replyText(replyToken,
             		"サポートライン連絡先の案内を行います。" + CODE
             		+ "現在地の位置情報を送信してください。");
+            lineTest.setMenuNo("5");
+    	}else{
+            this.replyText(replyToken,"メニュー番号"+lineTest.getMenuNo());
     	}
     }
 
