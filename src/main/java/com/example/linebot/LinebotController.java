@@ -144,7 +144,11 @@ public class LinebotController {
             		+ "現在地の位置情報を送信してください。");
             lineTest.setMenuNo("5");
     	}else{
-            this.replyText(replyToken,"メニュー番号"+lineTest.getMenuNo());
+    		if("0".equals(lineTest.getMenuNo())){
+                this.replyText(replyToken,text);
+    		}else{
+                this.replyText(replyToken,"メニュー番号"+lineTest.getMenuNo());
+    		}
     	}
     }
 
