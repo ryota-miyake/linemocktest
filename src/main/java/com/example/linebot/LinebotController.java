@@ -13,6 +13,7 @@ import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.action.DatetimePickerAction;
 import com.linecorp.bot.model.action.PostbackAction;
+import com.linecorp.bot.model.action.URIAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.FollowEvent;
 import com.linecorp.bot.model.event.MessageEvent;
@@ -33,6 +34,7 @@ import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 public class LinebotController {
 	@Autowired
     private LineMessagingClient lineMessagingClient;
+
     // 改行コード
     private static final String CODE = "\n";
 
@@ -40,15 +42,15 @@ public class LinebotController {
 
     // リッチメニュー選択時テキスト
 	private static final String JIKO_TEXT = "事故受付";
-	private static final Integer MENU_NO_JIKO = 1;
+	private static final String MENU_NO_JIKO = "1";
 	private static final String IRYOKIKAN_ANNA_TEXT = "医療機関案内";
-	private static final Integer MENU_NO_IRYOKIKAN = 2;
+	private static final String MENU_NO_IRYOKIKAN = "2";
 	private static final String KEIYAKU_HENKOU_TEXT = "契約内容変更";
-	private static final Integer MENU_NO_HENKOU = 3;
+	private static final String MENU_NO_HENKOU = "3";
 	private static final String KEIYAKU_TORIKESHI_TEXT = "契約取消";
-	private static final Integer MENU_NO_TORIKESHI = 4;
+	private static final String MENU_NO_TORIKESHI = "4";
 	private static final String SUPPORTLINE_ANNAI_TEXT = "サポートライン連絡先案内";
-	private static final Integer MENU_NO_SUPPORTLINE = 5;
+	private static final String MENU_NO_SUPPORTLINE = "5";
 
 	/**
 	 * テキスト
@@ -60,6 +62,7 @@ public class LinebotController {
     	TextMessageContent message = event.getMessage();
         handleTextContent(event.getReplyToken(), event, message);
         System.out.println("event: " + event);
+        new TextMessage("メッセージ確認");
     }
 	/**
 	 * 位置情報
@@ -83,13 +86,19 @@ public class LinebotController {
     @EventMapping
     public void handleFollowEvent(FollowEvent event) {
         String replyToken = event.getReplyToken();
+        System.out.println("event: " + event);
+
+
     }
 
     @EventMapping
     public void handlePostbackEvent(PostbackEvent event){
+    	//
     	String[] data = event.getPostbackContent().getData().split(",");
     	// リッチメニュー判定
         System.out.println("event: " + event);
+        lineTest.setMenuNo(menuNoCheck(data[0]));
+
 
     }
     /**
@@ -112,7 +121,7 @@ public class LinebotController {
             		"今回ご連絡いただいている保険事故について、該当の保険契約を以下からお選び下さい。");
             // プッシュメッセージ（カルーセルテンプレート）
             this.pushMessage(userId, this.createJikouketsukeKeiyakuCarouselTemplate());
-            lineTest.setMenuNo("1");
+            lineTest.setMenuNo(MENU_NO_JIKO);
     	}else if(IRYOKIKAN_ANNA_TEXT.equals(text)){
     		// 医療機関案内
     		// 位置情報の送信を依頼
@@ -120,7 +129,7 @@ public class LinebotController {
             		"医療機関の案内を行います。" + CODE
             		+ "現在地の位置情報を送信してください。");
 
-            lineTest.setMenuNo("2");
+            lineTest.setMenuNo(MENU_NO_IRYOKIKAN);
     	}else if(KEIYAKU_HENKOU_TEXT.equals(text)){
     		// 契約変更
     		// 応答メッセージ
@@ -128,21 +137,21 @@ public class LinebotController {
             		"契約内容の変更を行います。" + CODE
             		+ "変更する契約を選択してください。");
             // プッシュメッセージ（カルーセルテンプレート）
-            lineTest.setMenuNo("3");
+            lineTest.setMenuNo(MENU_NO_HENKOU);
     	}else if(KEIYAKU_TORIKESHI_TEXT.equals(text)){
     		// 契約取消
             this.replyText(replyToken,
             		"契約内容の取消を行います。" + CODE
             		+ "変更する契約を選択してください。");
             // プッシュメッセージ（カルーセルテンプレート）
-            lineTest.setMenuNo("4");
+            lineTest.setMenuNo(MENU_NO_TORIKESHI);
     	}else if(SUPPORTLINE_ANNAI_TEXT.equals(text)){
     		// サポートライン連絡先案内
     		// 位置情報の送信を依頼
             this.replyText(replyToken,
             		"サポートライン連絡先の案内を行います。" + CODE
             		+ "現在地の位置情報を送信してください。");
-            lineTest.setMenuNo("5");
+            lineTest.setMenuNo(MENU_NO_SUPPORTLINE);
     	}else{
     		if("0".equals(lineTest.getMenuNo())){
                 this.replyText(replyToken,text);
@@ -184,13 +193,15 @@ public class LinebotController {
     							Arrays.asList(new PostbackAction("この保険を選択する","jiko,TEST000003"))),
     					new CarouselColumn(null,"契約4","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
     							Arrays.asList(new PostbackAction("この保険を選択する","jiko,TEST000004"))),
-    					new CarouselColumn(null,"契約4","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
+    					new CarouselColumn(null,"契約5","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
     							Arrays.asList(new DatetimePickerAction("Datetime",
                                         "action=sel",
                                         "datetime",
                                         "2017-06-18T06:15",
                                         "2100-12-31T23:59",
-                                        "1900-01-01T00:00")))));
+                                        "1900-01-01T00:00"))),
+    					new CarouselColumn(null,"契約6","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
+    							Arrays.asList(new URIAction("uriアクション","line://msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")))));
     	TemplateMessage templateMessage = new TemplateMessage("事故受付契約選択", carouselTemplate);
     	return templateMessage;
     }
@@ -206,5 +217,24 @@ public class LinebotController {
 		} catch (InterruptedException | ExecutionException e) {
 			throw new RuntimeException(e);
 		}
+    }
+    private String menuNoCheck(String str){
+    	String[] data = str.split("=");
+    	if(! "Menu".equals(data[0])){
+    		return "0";
+    	}
+    	if(MENU_NO_JIKO.equals(data[1])){
+    		return MENU_NO_JIKO;
+    	}else if(MENU_NO_IRYOKIKAN.equals(data[1])){
+    		return MENU_NO_IRYOKIKAN;
+    	}else if(MENU_NO_HENKOU.equals(data[1])){
+    		return MENU_NO_HENKOU;
+    	}else if(MENU_NO_TORIKESHI.equals(data[1])){
+    		return MENU_NO_TORIKESHI;
+    	}else if(MENU_NO_SUPPORTLINE.equals(data[1])){
+    		return MENU_NO_SUPPORTLINE;
+    	}
+
+    	return "0";
     }
 }
