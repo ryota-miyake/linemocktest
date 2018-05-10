@@ -201,7 +201,7 @@ public class LinebotController {
                                         "2100-12-31T23:59",
                                         "1900-01-01T00:00"))),
     					new CarouselColumn(null,"契約6","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
-    							Arrays.asList(new URIAction("uriアクション","line://msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")))));
+    							Arrays.asList(new URIAction("uriアクション","https://line.me/R/msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")))));
     	TemplateMessage templateMessage = new TemplateMessage("事故受付契約選択", carouselTemplate);
     	return templateMessage;
     }
