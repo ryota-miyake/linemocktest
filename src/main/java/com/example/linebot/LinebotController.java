@@ -11,6 +11,7 @@ import org.springframework.lang.NonNull;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.ReplyMessage;
+import com.linecorp.bot.model.action.Action;
 import com.linecorp.bot.model.action.DatetimePickerAction;
 import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.action.PostbackAction;
@@ -63,7 +64,8 @@ public class LinebotController {
     	TextMessageContent message = event.getMessage();
         handleTextContent(event.getReplyToken(), event, message);
         System.out.println("event: " + event);
-        new MessageAction("","");
+
+//        Action action = new URIAction("URIアクション","https://line.me/R/msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
     }
 	/**
 	 * 位置情報
@@ -100,6 +102,7 @@ public class LinebotController {
         System.out.println("event: " + event);
         lineTest.setMenuNo(menuNoCheck(data[0]));
 
+        Action action = new URIAction("URIアクション","https://line.me/R/msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
 
     }
     /**
