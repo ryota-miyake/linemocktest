@@ -12,6 +12,7 @@ import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.ReplyMessage;
 import com.linecorp.bot.model.action.DatetimePickerAction;
+import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.FollowEvent;
@@ -61,7 +62,7 @@ public class LinebotController {
     	TextMessageContent message = event.getMessage();
         handleTextContent(event.getReplyToken(), event, message);
         System.out.println("event: " + event);
-        new TextMessage("メッセージ確認");
+        new MessageAction("","");
     }
 	/**
 	 * 位置情報
@@ -198,7 +199,11 @@ public class LinebotController {
                                         "datetime",
                                         "2017-06-18T06:15",
                                         "2100-12-31T23:59",
-                                        "1900-01-01T00:00")))));
+                                        "1900-01-01T00:00"))),
+    					new CarouselColumn(null,"契約6","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
+    							Arrays.asList(new MessageAction("メッセージアクション",
+                                        "メッセージ")))
+    					));
     	TemplateMessage templateMessage = new TemplateMessage("事故受付契約選択", carouselTemplate);
     	return templateMessage;
     }
