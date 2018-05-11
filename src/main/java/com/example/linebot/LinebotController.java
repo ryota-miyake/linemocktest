@@ -23,6 +23,7 @@ import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TemplateMessage;
 import com.linecorp.bot.model.message.TextMessage;
+import com.linecorp.bot.model.message.template.ButtonsTemplate;
 import com.linecorp.bot.model.message.template.CarouselColumn;
 import com.linecorp.bot.model.message.template.CarouselTemplate;
 import com.linecorp.bot.model.response.BotApiResponse;
@@ -136,6 +137,8 @@ public class LinebotController {
             		+ "変更する契約を選択してください。");
             // プッシュメッセージ（カルーセルテンプレート）
             lineTest.setMenuNo(MENU_NO_HENKOU);
+
+            this.pushMessage(userId, this.createButtonsTemplate());
     	}else if(KEIYAKU_TORIKESHI_TEXT.equals(text)){
     		// 契約取消
             this.replyText(replyToken,
@@ -218,6 +221,15 @@ public class LinebotController {
     					));
     	TemplateMessage templateMessage = new TemplateMessage("事故受付契約選択", carouselTemplate);
     	return templateMessage;
+    }
+
+    private Message createButtonsTemplate(){
+    	ButtonsTemplate buttonsTemplate = new ButtonsTemplate(null,null,"日付選択",
+    			Arrays.asList(new DatetimePickerAction("日付選択","action=sel","date","2017-06-18","2100-12-31","1900-01-01"))
+    			);
+
+
+    	return new TemplateMessage("日時選択アクション", buttonsTemplate);
     }
     /**
      * プッシュメッセージ
