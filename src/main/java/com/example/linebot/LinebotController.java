@@ -11,9 +11,7 @@ import org.springframework.lang.NonNull;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.ReplyMessage;
-import com.linecorp.bot.model.action.Action;
 import com.linecorp.bot.model.action.DatetimePickerAction;
-import com.linecorp.bot.model.action.MessageAction;
 import com.linecorp.bot.model.action.PostbackAction;
 import com.linecorp.bot.model.action.URIAction;
 import com.linecorp.bot.model.event.Event;
@@ -65,7 +63,6 @@ public class LinebotController {
         handleTextContent(event.getReplyToken(), event, message);
         System.out.println("event: " + event);
 
-//        Action action = new URIAction("URIアクション","https://line.me/R/msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
     }
 	/**
 	 * 位置情報
@@ -91,7 +88,6 @@ public class LinebotController {
         String replyToken = event.getReplyToken();
         System.out.println("event: " + event);
 
-
     }
 
     @EventMapping
@@ -101,8 +97,6 @@ public class LinebotController {
     	// リッチメニュー判定
         System.out.println("event: " + event);
         lineTest.setMenuNo(menuNoCheck(data[0]));
-
-        Action action = new URIAction("URIアクション","https://line.me/R/msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890");
 
     }
     /**
@@ -198,15 +192,26 @@ public class LinebotController {
     					new CarouselColumn(null,"契約4","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
     							Arrays.asList(new PostbackAction("この保険を選択する","jiko,TEST000004"))),
     					new CarouselColumn(null,"契約5","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
-    							Arrays.asList(new DatetimePickerAction("Datetime",
+    							Arrays.asList(new DatetimePickerAction("日付選択",
+                                        "action=sel",
+                                        "date",
+                                        "2017-06-18",
+                                        "2100-12-31",
+                                        "1900-01-01"))),
+    					new CarouselColumn(null,"契約6","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
+    							Arrays.asList(new DatetimePickerAction("時間選択",
+                                        "action=sel",
+                                        "time",
+                                        "06:15",
+                                        "23:59",
+                                        "00:00"))),
+    					new CarouselColumn(null,"契約7","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
+    							Arrays.asList(new DatetimePickerAction("日時選択",
                                         "action=sel",
                                         "datetime",
                                         "2017-06-18T06:15",
                                         "2100-12-31T23:59",
                                         "1900-01-01T00:00"))),
-    					new CarouselColumn(null,"契約6","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
-    							Arrays.asList(new MessageAction("メッセージアクション",
-                                        "メッセージ"))),
     					new CarouselColumn(null,"契約8","保険期間:20190401-20200401" + CODE + "旅行先：韓国" + CODE + "契約証番号：TEST000004",
     							Arrays.asList(new URIAction("URIアクション",
                                         "https://line.me/R/msg/text/?ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")))
